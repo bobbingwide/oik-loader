@@ -32,6 +32,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 function oik_loader_loaded() {
 
 	add_action( "run_oik-loader.php", "oik_loader_run_oik_loader");
+	add_action( "oik_admin_menu", "oik_loader_oik_admin_menu");
 
 }
 
@@ -41,9 +42,13 @@ function oik_loader_loaded() {
  *
  */
 function oik_loader_run_oik_loader() {
-	oik_require( "oik-loader-map.php", "oik-loader");
+	oik_require( "includes/oik-loader-map.php", "oik-loader");
 	oik_loader_map();
 
+}
+
+function oik_loader_oik_admin_menu() {
+	oik_require( "includes/oik-loader-admin.php", "oik-loader");
 }
 
 

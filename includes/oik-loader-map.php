@@ -6,18 +6,23 @@
 
 /**
  * Create the oik-loader map file for oik-loader-MU
- * in the mu-plugins folder
- *
- * It can either be a PHP file or a CSV or something
- *
+ * in the mu-plugins folder.
  *
  * Syntax: oikwp oik-loader.php url=blocks.wp-a2z.org
  *
  *
  */
 
-function oik_loader_csv_file() {
-	return WPMU_PLUGIN_DIR . '/oik-loader.csv';
+if ( !function_exists( "oik_loader_csv_file") ) {
+
+	function oik_loader_csv_file() {
+		$csv_file = WPMU_PLUGIN_DIR;
+		$csv_file .= '/oik-loader.';
+		global $blog_id;
+		$csv_file .= $blog_id;
+		$csv_file .= '.csv';
+		return $csv_file;
+	}
 }
 function oik_loader_map() {
 	$csv = oik_loader_csv_file();

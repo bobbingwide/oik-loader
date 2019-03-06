@@ -39,11 +39,11 @@ if ( $index ) {
 }
 
 /**
- * Builds the lookup index from oik-loader.csv
+ * Builds the lookup index from oik-loader.blog_id.csv
  * @return array|null
  */
 function oik_loader_mu_build_index() {
-	$oik_loader_csv = dirname( __FILE__  ) . "/oik-loader.csv";
+	$oik_loader_csv = oik_loader_csv_file();
 	$index = null;
 	if ( file_exists( $oik_loader_csv) ) {
 		//echo "File exists";
@@ -53,6 +53,19 @@ function oik_loader_mu_build_index() {
 		}
 	}
 	return $index;
+}
+
+	//$oik_loader_csv = dirname( __FILE__  ) . "/oik-loader." . $blog_id . ".csv";
+
+
+function oik_loader_csv_file() {
+	global $blog_id;
+	$csv_file = WPMU_PLUGIN_DIR ;
+	$csv_file .= '/oik-loader.';
+
+	$csv_file .= $blog_id;
+	$csv_file .= '.csv';
+	return $csv_file;
 }
 
 /**

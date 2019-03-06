@@ -18,7 +18,7 @@ WordPress Must Use plugin to load required plugins.
 1. Activate the oik-loader plugin through the 'Plugins' menu in WordPress
 1. Generate the oik-loader.csv file in the mu-plugins folder
 
-Note: The oik-loader-mu.php file is automatically copied to the mu-plugins folder
+Note: The includes/oik-loader-mu.php file is automatically copied to the mu-plugins folder
 
 
 
@@ -29,13 +29,14 @@ It helps to reduce the number of activated plugins in blocks.wp-a2z.org
 It dynamically loads the required plugin for a block.
 
 = Which plugins can I deactivate? =
-Once all the blocks for a plugin have been generated then the plugin can be deactived.
+Once all the blocks for a plugin have been generated then the plugin can be deactivated.
 
 With the following exceptions:
 - oik-blocks - since these blocks are used in all content
 - plugins upon which oik-blocks depends for server side rendering
+- any other plugins that deliver blocks that are used throughout the site
 
-Gutenberg is optional.
+The site should operate with/without Gutenberg being activated.
 
 
 == Screenshots ==
@@ -48,8 +49,9 @@ oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 == Changelog ==
 = 0.0.0 =
-* Added: includes/oik-loader-mu.php to automatically load the required plugin
 * Added: oik-loader.php - the main plugin file
+* Added: includes/oik-loader-mu.php to automatically load the required plugin
+* Added: includes/oik-loader-map.php - to generate the oik-loader.csv file
 
 == Further reading ==
 If you want to read more about oik plugins and themes then please visit 

@@ -33,6 +33,7 @@ function oik_loader_loaded() {
 
 	add_action( "run_oik-loader.php", "oik_loader_run_oik_loader");
 	add_action( "oik_admin_menu", "oik_loader_oik_admin_menu");
+	add_action( "oik_admin_loaded", "oik_loader_oik_admin_loaded");
 
 }
 
@@ -47,8 +48,13 @@ function oik_loader_run_oik_loader() {
 
 }
 
+function oik_loader_oik_admin_loaded() {
+
+}
+
 function oik_loader_oik_admin_menu() {
 	oik_require( "includes/oik-loader-admin.php", "oik-loader");
+	oik_loader_lazy_admin_menu();
 }
 
 

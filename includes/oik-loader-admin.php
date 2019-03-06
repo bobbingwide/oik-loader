@@ -31,42 +31,66 @@ function oik_loader_do_page() {
 }
 
 /**
- * We can't rely on the presence of the function since this
- * will still be loaded after deactivation.
+ * We can't rely on the presence of the oik_loader_build_index function since this
+ * will still be loaded after uninstallation.
  * We have to check if the file exists.
  * @return bool
  */
-
 function oik_loader_query_loader_mu() {
-	//$active = function_exists( "oik_loader_build_index") ;
 	$target = oik_loader_target_file();
 	if ( $target && file_exists( $target ) ) {
-		$active = true;
+		$installed = true;
 	} else {
-		$active = false;
+		$installed = false;
 	}
+	return $installed;
+}
 
+function oik_loader_query_loader_active() {
+	$active = function_exists( "oik_loader_mu_build_index") ;
 	return $active;
+
 }
 
 function oik_loader_oik_menu_box() {
 	oik_loader_mu_maybe_activate();
 
-	$oik_loader_mu_active = oik_loader_query_loader_mu();
-	if ( $oik_loader_mu_active ) {
-		p( "oik-loader_mu is active" );
-
+	$oik_loader_mu_installed = oik_loader_query_loader_mu();
+	if ( $oik_loader_mu_installed ) {
+		p( "oik-loader-mu is installed" );
 		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=deactivate" ), __( "Click to deactivate MU", "oik-loader" ) );
 	} else {
-		p( "Click on the link to activate oik-loader-mu logic" );
+		p( "Click on the link to install oik-loader-mu logic" );
 		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=activate" ), __( "Click to activate MU", "oik-loader" ) );
 	}
 
+	$oik_loader_mu_active = oik_loader_query_loader_active();
+	if ( $oik_loader_mu_active ) {
+		p( "oik-loader-mu is active");
 
+	} else {
+		p( "oik-loader-mu is not loaded");
+	}
+
+	if ( $oik_loader_mu_active ) {
+		$index = oik_loader_mu_build_index();
+		if ( null === $index ) {
+			p( "Index not built or empty");
+		} else {
+			oik_loader_display_index( $index );
+		}
+		br();
+		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=rebuild" ), __( "Click to rebuild index", "oik-loader" ) );
+	}
 }
 
+/**
+ * Activate / deactivate the oik-loader-mu plugin as required.
+ *
+ * MU plugins are activated as soon as they are installed.
+ * Obviously they don't become active until the next page load.
+ */
 function oik_loader_mu_maybe_activate() {
-
 	$mu_parm = bw_array_get( $_REQUEST, "mu", null );
 	switch ( $mu_parm ) {
 		case "activate":
@@ -75,10 +99,13 @@ function oik_loader_mu_maybe_activate() {
 		case "deactivate":
 			oik_loader_activate_mu( false );
 			break;
+
+		case "rebuild":
+			oik_loader_rebuild_index();
+			break;
 		default:
 			break;
 	}
-
 }
 
 /**
@@ -121,6 +148,25 @@ function oik_loader_activate_mu( $activate=true ) {
 				unlink( $target );
 			}
 		}
-	}	
+	}
+}
 
+/**
+ * Displays the index
+ * Note: There are two entries per post. One for the permalink, the other for the post ID.
+ *
+ * @param $index
+ */
+
+function oik_loader_display_index( $index ) {
+	p( "Index entries: " . count( $index ) );
+	foreach ( $index as $key =>  $plugin ) {
+		e( $key );
+		e( $plugin );
+		br();
+	}
+}
+
+function oik_loader_rebuild_index() {
+	oik_loader_run_oik_loader();
 }

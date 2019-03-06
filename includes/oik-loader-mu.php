@@ -26,27 +26,33 @@ License: GPL2
 
 */
 
+$index = oik_loader_mu_build_index();
 
-$uri = $_SERVER[ 'REQUEST_URI'];
-$path = parse_url( $uri, PHP_URL_PATH );
-//print_r( $page) ;
+if ( $index ) {
+	$uri    = $_SERVER['REQUEST_URI'];
+	$path   = parse_url( $uri, PHP_URL_PATH );
+	$plugin = oik_loader_mu_query_plugin( $index, $path );
+	if ( null !== $plugin ) {
+		oik_loader_load_plugin( $plugin );
+		add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
+	}
+}
 
-$oik_loader_csv = dirname( __FILE__  ) . "/oik-loader.csv";
-if ( file_exists( $oik_loader_csv) ) {
-	//echo "File exists";
-	$lines = file( $oik_loader_csv );
-	if ( count( $lines )) {
-		$index = oik_loader_build_index( $lines );
-		$plugin = oik_loader_mu_query_plugin( $index, $path );
-		if ( null !== $plugin ) {
-			oik_loader_load_plugin( $plugin );
-			add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
+/**
+ * Builds the lookup index from oik-loader.csv
+ * @return array|null
+ */
+function oik_loader_mu_build_index() {
+	$oik_loader_csv = dirname( __FILE__  ) . "/oik-loader.csv";
+	$index = null;
+	if ( file_exists( $oik_loader_csv) ) {
+		//echo "File exists";
+		$lines = file( $oik_loader_csv );
+		if ( count( $lines ) ) {
+			$index = oik_loader_build_index( $lines );
 		}
 	}
-} else {
-	// echo "No file exists";
-	// Do nothing.
-
+	return $index;
 }
 
 /**
@@ -64,8 +70,13 @@ function oik_loader_build_index( $lines ) {
 		$csv = str_getcsv( $line);
 		if ( count( $csv) === 3 ) {
 			//echo $csv[0];
-			$index[ $csv[0]] = $csv[2];
-			$index[ $csv[1]] = $csv[2];
+			if ( isset( $csv[2]) ) {
+				$plugin = $csv[2];
+			} else {
+				$plugin = null;
+			}
+			$index[ $csv[0]] = $plugin;
+			$index[ $csv[1]] = $plugin;
 		}
 	}
 	//print_r( $index );

@@ -1,8 +1,8 @@
 <?php
 
-if ( PHP_SAPI !== "cli" ) {
-	die();
-}
+//if ( PHP_SAPI !== "cli" ) {
+//	die();
+//}
 
 /**
  * Create the oik-loader map file for oik-loader-MU

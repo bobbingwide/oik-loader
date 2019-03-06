@@ -77,7 +77,8 @@ function oik_loader_oik_menu_box() {
 		if ( null === $index ) {
 			p( "Index not built or empty");
 		} else {
-			oik_loader_display_index( $index );
+			oik_loader_report_index( $index );
+			//oik_loader_display_index( $index );
 		}
 		br();
 		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=rebuild" ), __( "Click to rebuild index", "oik-loader" ) );
@@ -158,8 +159,18 @@ function oik_loader_activate_mu( $activate=true ) {
  * @param $index
  */
 
-function oik_loader_display_index( $index ) {
+function oik_loader_report_index( $index ) {
+	oik_require( "includes/oik-loader-map.php", "oik-loader");
 	p( "Index entries: " . count( $index ) );
+	$csvs = [];
+	$csvs = oik_loader_map_block_CPT( $csvs );
+	$expected = count( $csvs) * 2;
+	p( "Expected entries: " . $expected );
+}
+
+function oik_loader_display_index( $index ) {
+
+
 	foreach ( $index as $key =>  $plugin ) {
 		e( $key );
 		e( $plugin );

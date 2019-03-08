@@ -32,10 +32,18 @@ if ( $index ) {
 	$uri    = $_SERVER['REQUEST_URI'];
 	$path   = parse_url( $uri, PHP_URL_PATH );
 	$plugin = oik_loader_mu_query_plugin( $index, $path );
+	if ( null === $plugin ) {
+		$post_id = oik_loader_mu_determine_post_id( $uri );
+		if ( $post_id ) {
+			$plugin = oik_loader_mu_query_plugin( $index, $post_id );
+		}
+	}
+
 	if ( null !== $plugin ) {
 		oik_loader_load_plugin( $plugin );
 		add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
 	}
+
 }
 
 /**
@@ -144,4 +152,25 @@ function oik_loader_load_plugin( $plugin=null ) {
 		$load_plugin = $plugin;
 	}
 	return $load_plugin;
+}
+
+function oik_loader_mu_determine_post_id( $uri ) {
+	//$querystring = parse_url( $uri, PHP_URL_QUERY );
+	$id = null;
+	$querystring = $_SERVER[ 'QUERY_STRING'];
+	$parms = [];
+	if ( $querystring ) {
+		parse_str( $querystring, $parms );
+		$id = isset( $parms['post'] ) ? $parms['post'] : null;
+		if ( !$id ) {
+			$id = isset( $parms[ 'post_id' ]) ? $parms['post_id'] : null;
+		}
+		//print_r( $parms );
+
+
+	} else {
+		// No querystring is fine.
+	}
+	return $id;
+
 }

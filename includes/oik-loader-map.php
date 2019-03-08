@@ -38,13 +38,16 @@ function oik_loader_map() {
 }
 
 function oik_loader_get_scheme_host() {
-
 	$siteurl = site_url( null, "https");
-	e( "Site URL: " . $siteurl );
-	br();
 	$host = parse_url( $siteurl, PHP_URL_HOST );
 	$scheme_host = "https://" . $host;
 	return $scheme_host;
+}
+
+function oik_loader_report_siteurl() {
+	$siteurl = site_url( null, "https");
+	e( "Site URL: " . $siteurl );
+	br();
 }
 
 function oik_loader_get_hostless_permalink( $post_id, $scheme_host ) {

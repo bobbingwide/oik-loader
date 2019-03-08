@@ -26,6 +26,7 @@ function oik_loader_do_page() {
 
 	BW_::oik_menu_header( __( "oik loader", "oik" ), "w95pc" );
 	BW_::oik_box( null, null, __( 'oik-loader-mu', 'oik' ), "oik_loader_oik_menu_box" );
+	BW_::oik_box( null, null, __( 'plugins', 'oik-loader'), "oik_loader_plugins_box" );
 	oik_menu_footer();
 	bw_flush();
 }
@@ -61,8 +62,10 @@ function oik_loader_oik_menu_box() {
 		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=deactivate" ), __( "Click to deactivate MU", "oik-loader" ) );
 	} else {
 		p( "Click on the link to install oik-loader-mu logic" );
-		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=activate" ), __( "Click to activate MU", "oik-loader" ) );
 	}
+	br();
+	alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=activate" ), __( "Click to activate/update MU", "oik-loader" ) );
+
 
 	$oik_loader_mu_active = oik_loader_query_loader_active();
 	if ( $oik_loader_mu_active ) {
@@ -140,10 +143,11 @@ function oik_loader_activate_mu( $activate=true ) {
 	$target = oik_loader_target_file();
 	if ( $target ) {
 		if ( $activate ) {
-			if ( ! file_exists( $target ) ) {
-				$source = oik_path( 'includes/oik-loader-mu.php', "oik-loader" );
+			$source = oik_path( 'includes/oik-loader-mu.php', "oik-loader" );
+			if ( ! file_exists( $target ) || filemtime( $source) > filemtime( $target )) {
 				copy( $source, $target );
 			}
+
 		} else {
 			if ( file_exists( $target ) ) {
 				unlink( $target );
@@ -181,3 +185,15 @@ function oik_loader_display_index( $index ) {
 function oik_loader_rebuild_index() {
 	oik_loader_run_oik_loader();
 }
+
+function oik_loader_plugins_box() {
+	oik_require( "includes/oik-loader-plugins.php", "oik-loader");
+	$csvs = [];
+	$csvs = oik_loader_map_oik_plugins_CPT( $csvs );
+
+	oik_loader_display_oik_plugins( $csvs );
+
+
+}
+
+

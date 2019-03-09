@@ -1,9 +1,5 @@
 <?php
 
-//if ( PHP_SAPI !== "cli" ) {
-//	die();
-//}
-
 /**
  * Create the oik-loader map file for oik-loader-MU
  * in the mu-plugins folder.
@@ -24,17 +20,21 @@ if ( !function_exists( "oik_loader_csv_file") ) {
 		return $csv_file;
 	}
 }
-function oik_loader_map() {
+function oik_loader_update_map() {
 	$csv = oik_loader_csv_file();
 	e( "Updating " . $csv );
 	br();
-
-
-	$csvs = [];
-	$csvs = oik_loader_map_block_CPT( $csvs );
+	$csvs = oik_loader_load_map();
 	oik_loader_write_csv_file( $csvs );
+}
 
-
+function oik_loader_load_map() {
+	oik_require( "includes/oik-loader-plugins.php", "oik-loader");
+	$csvs = [];
+	$csvs = oik_loader_map_oik_plugins_CPT( $csvs );
+	$csvs = oik_loader_map_block_CPT( $csvs );
+	$csvs = oik_loader_map_block_example_CPT( $csvs );
+	return $csvs;
 }
 
 function oik_loader_get_scheme_host() {
@@ -68,7 +68,6 @@ function oik_loader_query_plugin_name( $post_id ) {
 /**
  * Map block CPTs
  */
-
 function oik_loader_map_block_CPT( $csvs ) {
 	oik_require( "includes/bw_posts.php" );
 	$atts        = array(
@@ -90,7 +89,38 @@ function oik_loader_map_block_CPT( $csvs ) {
 
 	return $csvs;
 }
+/**
+ * Map block_example CPTs
+ */
+function oik_loader_map_block_example_CPT( $csvs ) {
+	oik_require( "includes/bw_posts.php" );
+	$atts        = array(
+		"post_type"    => "block_example",
+		"post_parent"  => 0,
+		"number_posts" => - 1
+	);
+	$posts       = bw_get_posts( $atts );
+	$scheme_host = oik_loader_get_scheme_host();
+	foreach ( $posts as $post ) {
+		$line     = [];
+		$line[]   = oik_loader_get_hostless_permalink( $post->ID, $scheme_host );
+		$line[]   = $post->ID;
+		$line[]   = oik_loader_query_block_example_plugin_name( $post->ID );
+		$csv_line = implode( ",", $line );
+		$csvs[]   = $csv_line . PHP_EOL;
+	}
+	return $csvs;
+}
 
+/**
+ * Returns the plugin name given block_example ID
+ *
+ */
+function oik_loader_query_block_example_plugin_name( $post_id ) {
+	$block_id = get_post_meta( $post_id, "_block_ref", true);
+	$plugin_name = oik_loader_query_plugin_name( $block_id );
+	return $plugin_name;
+}
 
 function oik_loader_write_csv_file( $csvs ) {
 	$csv_file = oik_loader_csv_file();

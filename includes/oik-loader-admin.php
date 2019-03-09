@@ -166,10 +166,10 @@ function oik_loader_activate_mu( $activate=true ) {
 function oik_loader_report_index( $index ) {
 	oik_require( "includes/oik-loader-map.php", "oik-loader");
 	p( "Index entries: " . count( $index ) );
-	$csvs = [];
-	$csvs = oik_loader_map_block_CPT( $csvs );
+	$csvs = oik_loader_load_map();
 	$expected = count( $csvs) * 2;
 	p( "Expected entries: " . $expected );
+
 }
 
 function oik_loader_display_index( $index ) {

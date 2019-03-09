@@ -39,12 +39,12 @@ function oik_loader_loaded() {
 
 
 /**
- * Generate the oik-loader.map file for oik-loader-MU
+ * Generates/updates the oik-loader map file for oik-loader-MU
  *
  */
 function oik_loader_run_oik_loader() {
 	oik_require( "includes/oik-loader-map.php", "oik-loader");
-	oik_loader_map();
+	oik_loader_update_map();
 
 }
 

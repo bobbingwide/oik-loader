@@ -85,6 +85,8 @@ function oik_loader_oik_menu_box() {
 		}
 		br();
 		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=rebuild" ), __( "Click to rebuild index", "oik-loader" ) );
+		br();
+		alink( null, admin_url( "admin.php?page=oik_loader&amp;mu=rebuild-dependencies" ), __( "Click to rebuild plugin dependencies", "oik-loader" ) );
 	}
 }
 
@@ -106,6 +108,9 @@ function oik_loader_mu_maybe_activate() {
 
 		case "rebuild":
 			oik_loader_rebuild_index();
+			break;
+		case "rebuild-dependencies":
+			oik_loader_rebuild_dependencies();
 			break;
 		default:
 			break;
@@ -192,7 +197,11 @@ function oik_loader_plugins_box() {
 	$csvs = oik_loader_map_oik_plugins_CPT( $csvs );
 
 	oik_loader_display_oik_plugins( $csvs );
+}
 
+function oik_loader_rebuild_dependencies() {
+	oik_require( "includes/oik-loader-plugins.php", "oik-loader");
+	oik_loader_lazy_rebuild_dependencies();
 
 }
 

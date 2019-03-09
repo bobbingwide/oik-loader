@@ -1,14 +1,18 @@
 <?php
 
-
-function oik_loader_map_oik_plugins_CPT( $csvs ) {
+function oik_loader_get_oik_plugins_CPT() {
 	oik_require( "includes/bw_posts.php" );
 	$atts        = array(
 		"post_type"    => "oik-plugins",
 		"post_parent"  => 0,
 		"number_posts" => - 1
 	);
-	$posts       = bw_get_posts( $atts );
+	$posts = bw_get_posts( $atts );
+	return $posts;
+}
+
+function oik_loader_map_oik_plugins_CPT( $csvs ) {
+	$posts       = oik_loader_get_oik_plugins_CPT();
 	$scheme_host = oik_loader_get_scheme_host();
 	//$csvs = [];
 	foreach ( $posts as $post ) {
@@ -104,3 +108,53 @@ function oik_loader_display_oik_plugins_header() {
 		stag( "tbody" );
 	}
 }
+
+function oik_loader_lazy_rebuild_dependencies() {
+	$posts = oik_loader_get_oik_plugins_CPT();
+	$csvs = [];
+	foreach ( $posts as $post ) {
+		$ids = oik_loader_dependent_plugins( $post->ID);
+		$line = [];
+		foreach ( $ids as $key => $id) {
+			if ( $id ) {
+				$line[] = get_post_meta( $id, "_oikp_name", true );
+			}
+		}
+		$csvs[] = implode( ',', $line ) . PHP_EOL;
+	}
+
+	//$csvfile = oik_loader_component_dependencies_csv_file();
+	oik_loader_write_component_dependencies_csv_file( $csvs );
+}
+
+/**
+ * _oikp_dependency values include 0
+ * @param $post_id
+ *
+ * @return array|mixed
+ */
+
+function oik_loader_dependent_plugins( $post_id ) {
+	$ids = [];
+	$ids = get_post_meta( $post_id, '_oikp_dependency', false );
+	array_unshift( $ids, $post_id );
+	//print_r( $ids );
+	return $ids;
+}
+
+function oik_loader_write_component_dependencies_csv_file( $csvs ) {
+	$csv_file = oik_loader_component_dependencies_csv_file();
+	file_put_contents( $csv_file, $csvs );
+}
+
+if ( !function_exists( "oik_loader_component_dependencies_csv_file ")) {
+	function oik_loader_component_dependencies_csv_file() {
+		$csv_file = WPMU_PLUGIN_DIR;
+		$csv_file .= '/oik-component-dependencies.';
+		global $blog_id;
+		$csv_file .= $blog_id;
+		$csv_file .= '.csv';
+		return $csv_file;
+	}
+}
+

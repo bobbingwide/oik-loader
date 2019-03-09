@@ -37,6 +37,13 @@ function oik_loader_display_oik_plugins( $csvs ) {
 	etag( "table" );
 }
 
+/**
+ * Returns the Plugin status for a plugin
+ * @param $plugin_name
+ *
+ * @return string
+ *
+ */
 function oik_loader_plugin_status( $plugin_name ) {
 	//$included_files = get_included_files();
 	//$status = '?';
@@ -46,9 +53,9 @@ function oik_loader_plugin_status( $plugin_name ) {
 
 //) || is_plugin_active_for_network( $plugin );
 	if ( is_plugin_active_for_network( $plugin_name )) {
-		$status = "Network active";
+		$status = __( "Network active", "oik-loader" );
 	} elseif ( is_plugin_active( $plugin_name ) ) {
-		$status = "Active";
+		$status = __( "Active", "oik_loader" );
 
 	} else {
 		$status = "&nbsp;";
@@ -58,7 +65,23 @@ function oik_loader_plugin_status( $plugin_name ) {
 
 	}
 
+	$status .= oik_loader_load_plugin_status( $plugin_name );
+
 	return $status;
+}
+
+function oik_loader_load_plugin_status( $plugin_name ) {
+	if ( function_exists( "oik_loader_load_plugin") ) {
+		$plugin_loaded = oik_loader_load_plugin();
+
+	}
+	if ( $plugin_loaded === $plugin_name ) {
+		$status = __( " - lazy loaded", "oik-loader" );
+	} else {
+		$status = null;
+	}
+	return $status;
+
 }
 
 

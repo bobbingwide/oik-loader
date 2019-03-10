@@ -20,6 +20,7 @@ if ( !function_exists( "oik_loader_csv_file") ) {
 		return $csv_file;
 	}
 }
+
 function oik_loader_update_map() {
 	$csv = oik_loader_csv_file();
 	e( "Updating " . $csv );
@@ -32,8 +33,14 @@ function oik_loader_load_map() {
 	oik_require( "includes/oik-loader-plugins.php", "oik-loader");
 	$csvs = [];
 	$csvs = oik_loader_map_oik_plugins_CPT( $csvs );
+	//echo count( $csvs );
+	//echo PHP_EOL;
 	$csvs = oik_loader_map_block_CPT( $csvs );
+	//echo count( $csvs );
+	//echo PHP_EOL;
 	$csvs = oik_loader_map_block_example_CPT( $csvs );
+	//echo count( $csvs );
+	//echo PHP_EOL;
 	return $csvs;
 }
 
@@ -79,10 +86,16 @@ function oik_loader_map_block_CPT( $csvs ) {
 	$scheme_host = oik_loader_get_scheme_host();
 	//$csvs = [];
 	foreach ( $posts as $post ) {
-		$line     = [];
-		$line[]   = oik_loader_get_hostless_permalink( $post->ID, $scheme_host );
-		$line[]   = $post->ID;
-		$line[]   = oik_loader_query_plugin_name( $post->ID );
+		$line   = [];
+		$line[] = oik_loader_get_hostless_permalink( $post->ID, $scheme_host );
+		$line[] = $post->ID;
+		$line[] = oik_loader_query_plugin_name( $post->ID );
+		$ids = get_post_meta( $post->ID, '_oikp_dependency', false );
+		foreach ( $ids as $key => $id) {
+			if ( $id ) {
+				$line[] = get_post_meta( $id, "_oikp_name", true );
+			}
+		}
 		$csv_line = implode( ",", $line );
 		$csvs[]   = $csv_line . PHP_EOL;
 	}
@@ -106,6 +119,12 @@ function oik_loader_map_block_example_CPT( $csvs ) {
 		$line[]   = oik_loader_get_hostless_permalink( $post->ID, $scheme_host );
 		$line[]   = $post->ID;
 		$line[]   = oik_loader_query_block_example_plugin_name( $post->ID );
+		$ids = get_post_meta( $post->ID, '_oikp_dependency', false );
+		foreach ( $ids as $key => $id) {
+			if ( $id ) {
+				$line[] = get_post_meta( $id, "_oikp_name", true );
+			}
+		}
 		$csv_line = implode( ",", $line );
 		$csvs[]   = $csv_line . PHP_EOL;
 	}
@@ -126,5 +145,6 @@ function oik_loader_write_csv_file( $csvs ) {
 	$csv_file = oik_loader_csv_file();
 	file_put_contents( $csv_file, $csvs );
 }
+
 
 

@@ -31,16 +31,17 @@ $index = oik_loader_mu_build_index();
 if ( $index ) {
 	$uri    = $_SERVER['REQUEST_URI'];
 	$path   = parse_url( $uri, PHP_URL_PATH );
-	$plugin = oik_loader_mu_query_plugin( $index, $path );
-	if ( null === $plugin ) {
+	$plugins = oik_loader_mu_query_plugins( $index, $path );
+	if ( null === $plugins ) {
 		$post_id = oik_loader_mu_determine_post_id( $uri );
 		if ( $post_id ) {
-			$plugin = oik_loader_mu_query_plugin( $index, $post_id );
+			$plugins = oik_loader_mu_query_plugins( $index, $post_id );
 		}
 	}
 
-	if ( null !== $plugin ) {
-		oik_loader_load_plugin( $plugin );
+	if ( null !== $plugins ) {
+		$plugins = oik_loader_plugin_dependencies( $plugins );
+		oik_loader_load_plugins( $plugins );
 		add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
 	}
 
@@ -48,6 +49,7 @@ if ( $index ) {
 
 /**
  * Builds the lookup index from oik-loader.blog_id.csv
+ *
  * @return array|null
  */
 function oik_loader_mu_build_index() {
@@ -56,6 +58,8 @@ function oik_loader_mu_build_index() {
 	if ( file_exists( $oik_loader_csv) ) {
 		//echo "File exists";
 		$lines = file( $oik_loader_csv );
+		//echo count( $lines );
+		//echo PHP_EOL;
 		if ( count( $lines ) ) {
 			$index = oik_loader_build_index( $lines );
 		}
@@ -66,11 +70,12 @@ function oik_loader_mu_build_index() {
 	//$oik_loader_csv = dirname( __FILE__  ) . "/oik-loader." . $blog_id . ".csv";
 
 
-function oik_loader_csv_file() {
+function oik_loader_csv_file( $file='oik-loader') {
 	global $blog_id;
 	$csv_file = WPMU_PLUGIN_DIR ;
-	$csv_file .= '/oik-loader.';
-
+	$csv_file .= '/';
+	$csv_file .= $file;
+	$csv_file .= '.';
 	$csv_file .= $blog_id;
 	$csv_file .= '.csv';
 	return $csv_file;
@@ -79,7 +84,15 @@ function oik_loader_csv_file() {
 /**
  * Builds the lookup index for access by URI or post ID
  *
- * Post ID will be required when editing the post or server rendering in the REST API
+ * Post ID will be required when editing the post, server rendering in the REST API, or when previewing
+ *
+ * The format of the oik-loader CSV file is
+ * `
+ * URL,ID,plugin1,plugin2,...
+ * e.g.
+ * /block/uk-tides-oik-block-uk-tides/,551,oik-blocks/oik-blocks.php,uk-tides/uk-tides.php
+ *
+ * `
  *
  * @param $lines
  *
@@ -89,15 +102,12 @@ function oik_loader_build_index( $lines ) {
 	$index = [];
 	foreach ( $lines as $line ) {
 		$csv = str_getcsv( $line);
-		if ( count( $csv) === 3 ) {
+		if ( count( $csv) >= 3 ) {
 			//echo $csv[0];
-			if ( isset( $csv[2]) ) {
-				$plugin = $csv[2];
-			} else {
-				$plugin = null;
-			}
-			$index[ $csv[0]] = $plugin;
-			$index[ $csv[1]] = $plugin;
+			$url = array_shift( $csv );
+			$ID = array_shift( $csv );
+			$index[ $url] = $csv;
+			$index[ $ID] = $csv;
 		}
 	}
 	//print_r( $index );
@@ -105,19 +115,20 @@ function oik_loader_build_index( $lines ) {
 }
 
 /**
- * Returns the plugin name for the current block CPT
+ * Returns the plugin names for the current post
+ *
  * @param $index
  * @param $page
  *
- * @return null
+ * @return array of dependent plugin names
  */
-function oik_loader_mu_query_plugin( $index, $page ) {
-	$plugin = null;
+function oik_loader_mu_query_plugins( $index, $page ) {
+	$plugins = null;
 	if ( isset( $index[ $page ])) {
-		$plugin = $index[ $page ];
+		$plugins = $index[ $page ];
 	}
-	//echo "$" . $plugin;
-	return $plugin;
+	//echo "$" . count( $plugins ) . "£";
+	return $plugins;
 }
 
 
@@ -125,6 +136,8 @@ function oik_loader_mu_query_plugin( $index, $page ) {
  * Implements 'option_active_plugins' filter
  *
  * Adds the missing plugin(s) to the list of plugins to load
+ * This filter may be called multiple times, but we should only need to add our plugins once.
+ * @TODO Improve performance
  *
  * @param $active_plugins
  * @param $option
@@ -133,27 +146,44 @@ function oik_loader_mu_query_plugin( $index, $page ) {
  */
 function oik_loader_option_active_plugins( $active_plugins, $option ) {
 	//print_r( $active_plugins );
-	$load_plugin = oik_loader_load_plugin();
-	$active_plugins[] = $load_plugin;
+	bw_backtrace();
+	$load_plugins = oik_loader_load_plugins();
+	// build plugin dependency list
+	if ( $load_plugins ) {
+		//print_r( $load_plugins );
+		foreach ( $load_plugins as $load_plugin ) {
+			if ( !in_array( $load_plugin, $active_plugins) ) {
+				$active_plugins[] = $load_plugin;
+			}
+		}
+	}
+	//print_r( $active_plugins );
 	return $active_plugins;
 	
 }
 
 /**
- * Sets / gets the name of the plugin(s) to load
+ * Sets / gets the names of the plugins to load
  *
- * @param null $plugin
+ * @param null|array $plugins
  *
- * @return null
+ * @return null|array
  */
-function oik_loader_load_plugin( $plugin=null ) {
-	static $load_plugin = null;
-	if ( $plugin !== null ) {
-		$load_plugin = $plugin;
+function oik_loader_load_plugins( $plugins=null ) {
+	static $load_plugins = null;
+	if ( $plugins !== null ) {
+		$load_plugins = $plugins;
 	}
-	return $load_plugin;
+	return $load_plugins;
 }
 
+/**
+ * Attempts to determine the post ID for the request
+ *
+ * @param $uri
+ *
+ * @return mixed|null
+ */
 function oik_loader_mu_determine_post_id( $uri ) {
 	//$querystring = parse_url( $uri, PHP_URL_QUERY );
 	$id = null;
@@ -165,6 +195,9 @@ function oik_loader_mu_determine_post_id( $uri ) {
 		if ( !$id ) {
 			$id = isset( $parms[ 'post_id' ]) ? $parms['post_id'] : null;
 		}
+		if ( !$id ) {
+			$id = isset( $parms[ 'preview_id' ]) ? $parms['preview_id'] : null;
+		}
 		//print_r( $parms );
 
 
@@ -173,4 +206,41 @@ function oik_loader_mu_determine_post_id( $uri ) {
 	}
 	return $id;
 
+}
+
+function oik_loader_plugin_dependencies( $plugins ) {
+
+	$dependencies = oik_loader_load_plugin_dependency_file();
+	if ( $dependencies ) {
+		//print_r( $dependencies );
+		foreach ( $plugins as $plugin ) {
+			if ( isset( $dependencies[ $plugin])) {
+				$toadd = $dependencies[ $plugin];
+				foreach ( $toadd as $dependent_upon ) {
+					if ( !isset( $plugins[ $dependent_upon ])) {
+						$plugins[] = $dependendent_upon;
+					}
+				}
+			}
+
+		}
+	}
+	return $plugins;
+}
+
+function oik_loader_load_plugin_dependency_file() {
+	$dependencies_array = null;
+	$csv_file = oik_loader_csv_file("oik-component-dependencies" );
+	if ( file_exists( $csv_file ) ) {
+		$dependencies = file( $csv_file );
+		foreach ( $dependencies as $dependency ) {
+			$depends = explode( ',', $dependency );
+			if ( count( $depends ) > 1 ) {
+				$key = array_shift( $depends );
+				$dependencies_array[ $key ] = $depends;
+			}
+
+		}
+	}
+	return $dependencies_array;
 }

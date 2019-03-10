@@ -75,17 +75,16 @@ function oik_loader_plugin_status( $plugin_name ) {
 }
 
 function oik_loader_load_plugin_status( $plugin_name ) {
-	if ( function_exists( "oik_loader_load_plugin") ) {
-		$plugin_loaded = oik_loader_load_plugin();
-
+	$plugins_loaded = null;
+	if ( function_exists( "oik_loader_load_plugins") ) {
+		$plugins_loaded = oik_loader_load_plugins();
 	}
-	if ( $plugin_loaded === $plugin_name ) {
+	if ( $plugins_loaded && in_array( $plugin_name, $plugins_loaded ) ) {
 		$status = __( " - lazy loaded", "oik-loader" );
 	} else {
 		$status = null;
 	}
 	return $status;
-
 }
 
 

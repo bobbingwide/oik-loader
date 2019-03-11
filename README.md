@@ -1,19 +1,20 @@
-=== oik-loader ===
-Contributors: bobbingwide, vsgloik
-Donate link: https://www.oik-plugins.com/oik/oik-donate/
-Tags: oik, plugin, loader
-Requires at least: 5.1
-Tested up to: 5.1
-Stable tag: 0.1.0
+# oik-loader 
+![banner](https://raw.githubusercontent.com/bobbingwide/oik-loader/master/assets/oik-loader-banner-772x250.jpg)
+* Contributors: bobbingwide, vsgloik
+* Donate link: https://www.oik-plugins.com/oik/oik-donate/
+* Tags: oik, plugin, loader
+* Requires at least: 5.1
+* Tested up to: 5.1
+* Stable tag: 0.1.0
 
 WordPress Must Use plugin to load required plugins.
 
-== Description ==
+## Description 
 Use the oik-loader plugin to load required plugins on demand.
 Dynamically loading the required plugins allow the block catalog to show live examples of blocks implemented by a wide range of plugins.
 Developed for use on blocks.wp-a2z.org and oik-plugins.com
 
-== Installation ==
+## Installation 
 1. Upload the contents of the oik-loader plugin to the `/wp-content/plugins/oik-loader' directory
 1. Activate the oik-loader plugin through the 'Plugins' menu in WordPress
 1. Visit oik-loader admin page
@@ -21,18 +22,18 @@ Developed for use on blocks.wp-a2z.org and oik-plugins.com
 1. Click on the link to Rebuild the index - oik-loader.site.csv file in the mu-plugins folder
 1. Click on the link to Rebuild the plugin dependencies - oik-component-dependencies.site.csv file in the mu-plugins folder
 
-Note: In a WordPress Multi Site installation
-- There will only be one version of the Must Use plugin ( oik-loader-mu.php ) 
+* Note: In a WordPress Multi Site installation
+- There will only be one version of the Must Use plugin ( oik-loader-mu.php )
 - There will be multiple index and component dependencies files; one of each per site.
 
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions 
 
-= What is this plugin for? =
+# What is this plugin for? 
 It helps to reduce the number of activated plugins in blocks.wp-a2z.org
 It dynamically loads the required plugins for a plugin, block or block_example.
 
-= Which plugins can I deactivate? =
+# Which plugins can I deactivate? 
 Once all the blocks for a plugin have been generated then the plugin can be deactivated.
 
 With the following exceptions:
@@ -44,20 +45,20 @@ With the following exceptions:
 The site should operate with/without Gutenberg being activated.
 
 
-== Screenshots ==
+## Screenshots 
 1. None
 
-== Upgrade Notice ==
-= 0.1.0= 
-Now supports plugin dependencies for blocks and block examples.  
+## Upgrade Notice 
+# 0.1.0
+Now supports plugin dependencies for blocks and block examples.
 
-= 0.0.0 =
+# 0.0.0 
 Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
-== Changelog ==
-= 0.1.0 =
-* Added: Plugin dependency logic to dynamically load required plugins for a block / block example, [github bobbingwide oik-loader issue #2]
+## Changelog 
+# 0.1.0 
+* Added: Plugin dependency logic to dynamically load required plugins for a block / block example, https://github.com/bobbingwide/oik-loader/issues/#2
 * Added: oik-loader admin to activate/deactivate the Must Use plugin ( oik-loader-mu.php )
 * Added: oik-loader admin to build the index for oik-plugins, blocks and block examples
 * Added: oik-loader admin to build the plugin dependency file
@@ -65,13 +66,13 @@ oik-blocks needs to be activated since these blocks are used by the block CPT.
 * Added: Support for editor invocation ( using post ), server side rendering ( using post_id ), and preview ( using preview_id )
 * Added: Support for WordPress Multi Site
 
-= 0.0.0 =
+# 0.0.0 
 * Added: oik-loader.php - the main plugin file
 * Added: includes/oik-loader-mu.php to automatically load the required plugin
 * Added: includes/oik-loader-map.php - to generate the oik-loader.csv file
 
-== Further reading ==
-If you want to read more about oik plugins and themes then please visit 
+## Further reading 
+If you want to read more about oik plugins and themes then please visit
 [oik-plugins](https://www.oik-plugins.com/)
 
 

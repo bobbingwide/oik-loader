@@ -2,9 +2,9 @@
 Contributors: bobbingwide, vsgloik
 Donate link: https://www.oik-plugins.com/oik/oik-donate/
 Tags: oik, plugin, loader
-Requires at least: 5.1
-Tested up to: 5.1
-Stable tag: 0.1.0
+Requires at least: 5.1.1
+Tested up to: 5.1.1
+Stable tag: 0.1.1
 
 WordPress Must Use plugin to load required plugins.
 
@@ -48,6 +48,9 @@ The site should operate with/without Gutenberg being activated.
 1. None
 
 == Upgrade Notice ==
+= 0.1.1 =
+Fixes a couple of deployment problems.
+
 = 0.1.0= 
 Now supports plugin dependencies for blocks and block examples.  
 
@@ -56,6 +59,13 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 == Changelog ==
+= 0.1.1 = 
+* Fixed: Disable MU logic when running in batch
+* Fixed: Avoid message from missing function when oik-loader-mu has not yet been deployed
+* Tested: With WordPress 5.1.1 and WordPress Multi Site
+* Tested: With Gutenberg 5.3
+* Tested: With PHP 7.2 
+
 = 0.1.0 =
 * Added: Plugin dependency logic to dynamically load required plugins for a block / block example, [github bobbingwide oik-loader issue #2]
 * Added: oik-loader admin to activate/deactivate the Must Use plugin ( oik-loader-mu.php )

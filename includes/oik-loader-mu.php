@@ -26,25 +26,31 @@ License: GPL2
 
 */
 
-$index = oik_loader_mu_build_index();
+if ( PHP_SAPI !== "cli" ) {
+	oik_loader_mu_loaded();
+}
 
-if ( $index ) {
-	$uri    = $_SERVER['REQUEST_URI'];
-	$path   = parse_url( $uri, PHP_URL_PATH );
-	$plugins = oik_loader_mu_query_plugins( $index, $path );
-	if ( null === $plugins ) {
-		$post_id = oik_loader_mu_determine_post_id( $uri );
-		if ( $post_id ) {
-			$plugins = oik_loader_mu_query_plugins( $index, $post_id );
+function oik_loader_mu_loaded() {
+	$index = oik_loader_mu_build_index();
+
+	if ( $index ) {
+		$uri     = $_SERVER['REQUEST_URI'];
+		$path    = parse_url( $uri, PHP_URL_PATH );
+		$plugins = oik_loader_mu_query_plugins( $index, $path );
+		if ( null === $plugins ) {
+			$post_id = oik_loader_mu_determine_post_id( $uri );
+			if ( $post_id ) {
+				$plugins = oik_loader_mu_query_plugins( $index, $post_id );
+			}
 		}
-	}
 
-	if ( null !== $plugins ) {
-		$plugins = oik_loader_plugin_dependencies( $plugins );
-		oik_loader_load_plugins( $plugins );
-		add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
-	}
+		if ( null !== $plugins ) {
+			$plugins = oik_loader_plugin_dependencies( $plugins );
+			oik_loader_load_plugins( $plugins );
+			add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
+		}
 
+	}
 }
 
 /**
@@ -218,7 +224,7 @@ function oik_loader_plugin_dependencies( $plugins ) {
 				$toadd = $dependencies[ $plugin];
 				foreach ( $toadd as $dependent_upon ) {
 					if ( !isset( $plugins[ $dependent_upon ])) {
-						$plugins[] = $dependendent_upon;
+						$plugins[] = $dependent_upon;
 					}
 				}
 			}

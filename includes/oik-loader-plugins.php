@@ -13,6 +13,7 @@ function oik_loader_get_oik_plugins_CPT() {
 
 function oik_loader_map_oik_plugins_CPT( $csvs ) {
 	$posts       = oik_loader_get_oik_plugins_CPT();
+	oik_require( "includes/oik-loader-map.php", "oik-loader");
 	$scheme_host = oik_loader_get_scheme_host();
 	//$csvs = [];
 	foreach ( $posts as $post ) {

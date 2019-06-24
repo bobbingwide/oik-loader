@@ -152,7 +152,7 @@ function oik_loader_mu_query_plugins( $index, $page ) {
  */
 function oik_loader_option_active_plugins( $active_plugins, $option ) {
 	//print_r( $active_plugins );
-	bw_backtrace();
+	//bw_backtrace();
 	$load_plugins = oik_loader_load_plugins();
 	// build plugin dependency list
 	if ( $load_plugins ) {

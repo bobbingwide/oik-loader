@@ -42,6 +42,9 @@ function oik_loader_mu_loaded() {
 			if ( $post_id ) {
 				$plugins = oik_loader_mu_query_plugins( $index, $post_id );
 			}
+			if ( null === $plugins ) {
+			    $plugins = oik_loader_mu_query_plugins_for_query( $index );
+            }
 		}
 
 		if ( null !== $plugins ) {
@@ -129,6 +132,7 @@ function oik_loader_build_index( $lines ) {
  * @return array of dependent plugin names
  */
 function oik_loader_mu_query_plugins( $index, $page ) {
+    //echo $page;
 	$plugins = null;
 	if ( isset( $index[ $page ])) {
 		$plugins = $index[ $page ];
@@ -152,13 +156,14 @@ function oik_loader_mu_query_plugins( $index, $page ) {
  */
 function oik_loader_option_active_plugins( $active_plugins, $option ) {
 	//print_r( $active_plugins );
-	bw_backtrace();
+	//bw_backtrace();
 	$load_plugins = oik_loader_load_plugins();
 	// build plugin dependency list
 	if ( $load_plugins ) {
 		//print_r( $load_plugins );
 		foreach ( $load_plugins as $load_plugin ) {
 			if ( !in_array( $load_plugin, $active_plugins) ) {
+				//echo "adding $load_plugin";
 				$active_plugins[] = $load_plugin;
 			}
 		}
@@ -180,6 +185,9 @@ function oik_loader_load_plugins( $plugins=null ) {
 	if ( $plugins !== null ) {
 		$load_plugins = $plugins;
 	}
+	//echo "Load plugins";
+	//var_dump( debug_backtrace());
+	//print_r( $load_plugins );
 	return $load_plugins;
 }
 
@@ -249,4 +257,26 @@ function oik_loader_load_plugin_dependency_file() {
 		}
 	}
 	return $dependencies_array;
+}
+
+function oik_loader_mu_query_plugins_for_query( $index ) {
+    $plugins = null;
+    $querystring = $_SERVER[ 'QUERY_STRING'];
+    $parms = [];
+    if ( $querystring ) {
+        parse_str($querystring, $parms);
+        //print_r( $parms );
+        $key = key($parms);
+        $value = current($parms);
+        $query_index = "$key=$value";
+        //echo $query_index;
+        $plugins = oik_loader_mu_query_plugins($index, $query_index);
+    }
+    /*
+    if ( isset( $parms['edd-api'])) {
+        $plugins[] = 'edd-blocks/edd-blocks.php';
+        $plugins[] = 'easy-digital-downloads/easy-digital-downloads.php';
+    }
+    */
+    return $plugins;
 }

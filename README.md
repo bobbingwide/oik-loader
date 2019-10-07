@@ -3,9 +3,9 @@
 * Contributors: bobbingwide, vsgloik
 * Donate link: https://www.oik-plugins.com/oik/oik-donate/
 * Tags: oik, plugin, loader
-* Requires at least: 5.1.1
-* Tested up to: 5.1.1
-* Stable tag: 0.1.1
+* Requires at least: 5.2.3
+* Tested up to: 5.2.3
+* Stable tag: 1.0.0
 
 WordPress Must Use plugin to load required plugins.
 
@@ -21,10 +21,12 @@ Developed for use on blocks.wp-a2z.org and oik-plugins.com
 1. Click on the link to activate/update the Must Use ( MU ) plugin
 1. Click on the link to Rebuild the index - oik-loader.site.csv file in the mu-plugins folder
 1. Click on the link to Rebuild the plugin dependencies - oik-component-dependencies.site.csv file in the mu-plugins folder
+1. If required provide an oik-loader-extras.csv file in the mu-plugins folder
 
 * Note: In a WordPress Multi Site installation
 - There will only be one version of the Must Use plugin ( oik-loader-mu.php )
 - There will be multiple index and component dependencies files; one of each per site.
+- There may be one oik-loader-extras.csv file.
 
 
 ## Frequently Asked Questions 
@@ -49,6 +51,9 @@ The site should operate with/without Gutenberg being activated.
 1. None
 
 ## Upgrade Notice 
+# 1.0.0 
+Upgrade for improved support for custom taxonomies and endpoints registered by plugins, through use of the oik-loader-extras.csv file.
+
 # 0.1.1 
 Fixes a couple of deployment problems.
 
@@ -60,6 +65,13 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 ## Changelog 
+# 1.0.0 
+* Fixed: edd-api=products query parameter needs Easy-Digital-Downloads to be loaded,https://github.com/bobbingwide/oik-loader/issues/#7
+* Fixed: 404's for unregistered taxonomies stopping blocks from working,https://github.com/bobbingwide/oik-loader/issues/#8
+* Tested: With WordPress 5.2.3
+* Tested: With Gutenberg 6.5.0
+* Tested: With PHP 7.3
+
 # 0.1.1 
 * Fixed: Disable MU logic when running in batch
 * Fixed: Avoid message from missing function when oik-loader-mu has not yet been deployed

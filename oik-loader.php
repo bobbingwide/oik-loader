@@ -3,9 +3,9 @@
 Plugin Name: oik-loader
 Plugin URI: https://www.oik-plugins.com/oik-plugins/oik-loader
 Description: WordPress plugin to dynamically load required plugins for blocks
-Version: 0.1.1
+Version: 1.0.0
 Author: bobbingwide
-Author URI: https://www.oik-plugins.com/author/bobbingwide
+Author URI: https://bobbingwide.com/about-bobbing-wide/
 Text Domain: oik-loader
 Domain Path: /languages/
 License: GPLv2 or later

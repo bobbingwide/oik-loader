@@ -3,8 +3,8 @@ Contributors: bobbingwide, vsgloik
 Donate link: https://www.oik-plugins.com/oik/oik-donate/
 Tags: oik, plugin, loader
 Requires at least: 5.2.3
-Tested up to: 5.2.3
-Stable tag: 1.0.0
+Tested up to: 5.7.2
+Stable tag: 1.1.0
 
 WordPress Must Use plugin to load required plugins.
 
@@ -43,13 +43,18 @@ With the following exceptions:
 - plugins which are required for other functionality
 
 
-The site should operate with/without Gutenberg being activated.
+If not running an FSE the site should operate with/without Gutenberg being activated.
+Currently Gutenberg is required for an FSE theme.
+In v1.1.0 the logic has been changed to support different variants of the Gutenberg plugin being the activated plugin.
 
 
 == Screenshots ==
 1. None
 
 == Upgrade Notice ==
+= 1.1.0 = 
+Upgrade for a fix to issue #11 allowing a variation of the Gutenberg plugin to be activated.
+
 = 1.0.0 = 
 Upgrade for improved support for custom taxonomies and endpoints registered by plugins, through use of the oik-loader-extras.csv file. 
 
@@ -64,6 +69,12 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 == Changelog ==
+= 1.1.0 = 
+* Fixed: Avoid attempting to load different variants of Gutenberg,[github bobbingwide oik-loader issues #11]
+* Tested: With WordPress 5.7.2 and WordPress Multi Site
+* Tested: With Gutenberg 10.6.2 and different variations
+* Tested: With PHP 8.0
+
 = 1.0.0 = 
 * Fixed: edd-api=products query parameter needs Easy-Digital-Downloads to be loaded,[github bobbingwide oik-loader issues #7]
 * Fixed: 404's for unregistered taxonomies stopping blocks from working,[github bobbingwide oik-loader issues #8]

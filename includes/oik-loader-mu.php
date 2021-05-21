@@ -32,6 +32,7 @@ if ( PHP_SAPI !== "cli" ) {
 
 function oik_loader_mu_loaded() {
 	$index = oik_loader_mu_build_index();
+	//print_r( $index );
 
 	if ( $index ) {
 		$uri     = $_SERVER['REQUEST_URI'];
@@ -46,6 +47,8 @@ function oik_loader_mu_loaded() {
 			    $plugins = oik_loader_mu_query_plugins_for_query( $index );
             }
 		}
+		//print_r( $plugins );
+		//echo "cfd;";
 
 		if ( null !== $plugins ) {
 			$plugins = oik_loader_plugin_dependencies( $plugins );
@@ -135,7 +138,11 @@ function oik_loader_mu_query_plugins( $index, $page ) {
     //echo $page;
 	$plugins = null;
 	if ( isset( $index[ $page ])) {
+	    //print_r( $index[ $page ]);
+        if  ( 0 === strpos( $index[$page][0], 'gutenberg' ) ) {
+        } else {
 		$plugins = $index[ $page ];
+        }
 	}
 	//echo "$" . count( $plugins ) . "£";
 	return $plugins;
@@ -161,6 +168,7 @@ function oik_loader_option_active_plugins( $active_plugins, $option ) {
 	// build plugin dependency list
 	if ( $load_plugins ) {
 		//print_r( $load_plugins );
+
 		foreach ( $load_plugins as $load_plugin ) {
 			if ( !in_array( $load_plugin, $active_plugins) ) {
 				//echo "adding $load_plugin";
@@ -231,6 +239,10 @@ function oik_loader_plugin_dependencies( $plugins ) {
 			if ( isset( $dependencies[ $plugin])) {
 				$toadd = $dependencies[ $plugin];
 				foreach ( $toadd as $dependent_upon ) {
+					if  ( 0 === strpos( $dependent_upon, 'gutenberg' ) ) {
+
+						continue;
+					}
 					if ( !isset( $plugins[ $dependent_upon ])) {
 						$plugins[] = $dependent_upon;
 					}

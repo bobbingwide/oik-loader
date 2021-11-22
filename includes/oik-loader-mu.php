@@ -170,9 +170,11 @@ function oik_loader_option_active_plugins( $active_plugins, $option ) {
 		//print_r( $load_plugins );
 
 		foreach ( $load_plugins as $load_plugin ) {
+            $load_plugin = trim( $load_plugin );
 			if ( !in_array( $load_plugin, $active_plugins) ) {
 				//echo "adding $load_plugin";
-				$active_plugins[] = $load_plugin;
+                array_unshift( $active_plugins, $load_plugin );
+				//$active_plugins[] = $load_plugin;
 			}
 		}
 	}

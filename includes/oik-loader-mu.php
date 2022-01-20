@@ -273,25 +273,11 @@ function oik_loader_load_plugin_dependency_file() {
 	return $dependencies_array;
 }
 
-
 function oik_loader_mu_query_plugins_for_query( $index ) {
     $plugins = null;
     $querystring = $_SERVER[ 'QUERY_STRING'];
-    $parms = [];
     if ( $querystring ) {
-        parse_str($querystring, $parms);
-        //print_r( $parms );
-        $key = key($parms);
-        $value = current($parms);
-        $query_index = "$key=$value";
-        //echo $query_index;
-        $plugins = oik_loader_mu_query_plugins($index, $query_index);
+        $plugins = oik_loader_mu_query_plugins($index, $querystring);
     }
-    /*
-    if ( isset( $parms['edd-api'])) {
-        $plugins[] = 'edd-blocks/edd-blocks.php';
-        $plugins[] = 'easy-digital-downloads/easy-digital-downloads.php';
-    }
-    */
     return $plugins;
 }

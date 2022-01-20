@@ -3,7 +3,7 @@
 Plugin Name: oik-loader
 Plugin URI: https://www.oik-plugins.com/oik-plugins/oik-loader
 Description: WordPress plugin to dynamically load required plugins for blocks
-Version: 1.1.0
+Version: 1.2.0
 Author: bobbingwide
 Author URI: https://bobbingwide.com/about-bobbing-wide/
 Text Domain: oik-loader
@@ -11,7 +11,7 @@ Domain Path: /languages/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-    Copyright 2019-2021 Bobbing Wide (email : herb@bobbingwide.com )
+    Copyright 2019-2022 Bobbing Wide (email : herb@bobbingwide.com )
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2,

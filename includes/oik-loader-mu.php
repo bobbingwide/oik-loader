@@ -3,12 +3,12 @@
 Plugin Name: oik-loader-MU
 Plugin URI: https://www.oik-plugins.com/oik-plugins/oik-loader-mu
 Description: WordPress Must Use plugin to load required plugins
-Version: 1.0.0
+Version: 1.2.0
 Author: bobbingwide
 Author URI: https://www.oik-plugins.com/author/bobbingwide
 License: GPL2
 
-    Copyright 2019 Bobbing Wide (email : herb@bobbingwide.com )
+    Copyright 2019-2022 Bobbing Wide (email : herb@bobbingwide.com )
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2,

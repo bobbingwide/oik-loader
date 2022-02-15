@@ -3,8 +3,8 @@ Contributors: bobbingwide, vsgloik
 Donate link: https://www.oik-plugins.com/oik/oik-donate/
 Tags: oik, plugin, loader
 Requires at least: 5.2.3
-Tested up to: 5.9-RC3
-Stable tag: 1.2.0
+Tested up to: 5.9
+Stable tag: 1.3.0
 
 WordPress Must Use plugin to load required plugins.
 
@@ -52,6 +52,9 @@ In v1.1.0 the logic has been changed to support different variants of the Gutenb
 1. None
 
 == Upgrade Notice ==
+= 1.3.0 = 
+Upgrade for use on cwiccer.com  
+
 = 1.2.0 =
 Upgrade for fixes to issues #6 and #12
 
@@ -72,6 +75,12 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 == Changelog ==
+= 1.3.0 =
+* Changed: Add support to edit the oik-loader-extras.csv file #10
+* Fixed: Avoid notice when oik-loader-extras.csv file is missing #9
+* Tested: With WordPress 5.9 
+* Tested: With PHP 8.0
+
 = 1.2.0 =
 * Fixed: Avoid Warning for querystrings which represent arrays. Fixes #12
 * Fixed: Load dependent plugins earlier #6

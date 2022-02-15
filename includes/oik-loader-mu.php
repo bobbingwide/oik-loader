@@ -54,6 +54,7 @@ function oik_loader_mu_loaded() {
 			$plugins = oik_loader_plugin_dependencies( $plugins );
 			oik_loader_load_plugins( $plugins );
 			add_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10, 2 );
+			add_action( "shutdown", "oik_loader_shutdown", 2 );
 		}
 
 	}
@@ -280,4 +281,11 @@ function oik_loader_mu_query_plugins_for_query( $index ) {
         $plugins = oik_loader_mu_query_plugins($index, $querystring);
     }
     return $plugins;
+}
+
+function oik_loader_shutdown() {
+    remove_filter( "option_active_plugins", "oik_loader_option_active_plugins", 10);
+    // Trick NextGEN Gallery into thinking a plugin's been activated;
+    // causing C_NextGEN_Bootstrap::fix_loading_order() to return early.
+    do_action( 'activate_plugin', __FILE__);
 }

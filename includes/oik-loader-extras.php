@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright (C) Copyright Bobbing Wide 2019
+ * @copyright (C) Copyright Bobbing Wide 2019-2022
  */
-
 
 function oik_loader_append_extras( $csvs ) {
     $extras = oik_loader_load_extras();
@@ -23,6 +22,21 @@ function oik_loader_extras_file() {
 }
 
 function oik_loader_load_extras() {
-    $extras = file( oik_loader_extras_file() );
+    $filename = oik_loader_extras_file();
+    $extras = [];
+    if ( file_exists( $filename ) ) {
+        $extras = file(oik_loader_extras_file());
+    }
     return $extras;
+}
+
+function oik_loader_lazy_save_extras() {
+    p( "Saving extras");
+    $extras = bw_array_get( $_REQUEST, 'extras', null);
+    if ( $extras ) {
+
+        $file = oik_loader_extras_file();
+        p( "Updating $file");
+        file_put_contents( $file, $extras );
+    }
 }

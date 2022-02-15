@@ -24,9 +24,10 @@ function oik_loader_lazy_admin_menu() {
 
 function oik_loader_do_page() {
 
-	BW_::oik_menu_header( __( "oik loader", "oik" ), "w95pc" );
+	BW_::oik_menu_header( __( "oik loader", "oik" ), "w100pc" );
 	BW_::oik_box( null, null, __( 'oik-loader-mu', 'oik' ), "oik_loader_oik_menu_box" );
 	BW_::oik_box( null, null, __( 'plugins', 'oik-loader'), "oik_loader_plugins_box" );
+	BW_::oik_box( null, null, __( 'extras', 'oik-loader'), 'oik_loader_extras_box' );
 	oik_menu_footer();
 	bw_flush();
 }
@@ -55,6 +56,7 @@ function oik_loader_query_loader_active() {
 
 function oik_loader_oik_menu_box() {
 	oik_loader_mu_maybe_activate();
+	oik_loader_process_extras();
 
 	$oik_loader_mu_installed = oik_loader_query_loader_mu();
 	if ( $oik_loader_mu_installed ) {
@@ -96,25 +98,35 @@ function oik_loader_oik_menu_box() {
  * MU plugins are activated as soon as they are installed.
  * Obviously they don't become active until the next page load.
  */
-function oik_loader_mu_maybe_activate() {
-	$mu_parm = bw_array_get( $_REQUEST, "mu", null );
-	switch ( $mu_parm ) {
-		case "activate":
-			oik_loader_activate_mu();
-			break;
-		case "deactivate":
-			oik_loader_activate_mu( false );
-			break;
+function oik_loader_mu_maybe_activate()
+{
+    $mu_parm = bw_array_get($_REQUEST, "mu", null);
+    switch ($mu_parm) {
+        case "activate":
+            oik_loader_activate_mu();
+            break;
+        case "deactivate":
+            oik_loader_activate_mu(false);
+            break;
 
-		case "rebuild":
-			oik_loader_rebuild_index();
-			break;
-		case "rebuild-dependencies":
-			oik_loader_rebuild_dependencies();
-			break;
-		default:
-			break;
-	}
+        case "rebuild":
+            oik_loader_rebuild_index();
+            break;
+        case "rebuild-dependencies":
+            oik_loader_rebuild_dependencies();
+            break;
+
+        default:
+            break;
+    }
+}
+
+function oik_loader_process_extras() {
+    $save = bw_array_get( $_REQUEST, 'save-extras', null );
+    if ( $save ) {
+        oik_loader_save_extras();
+        oik_loader_rebuild_index();
+    }
 }
 
 /**
@@ -203,6 +215,27 @@ function oik_loader_rebuild_dependencies() {
 	oik_require( "includes/oik-loader-plugins.php", "oik-loader");
 	oik_loader_lazy_rebuild_dependencies();
 
+}
+
+
+function oik_loader_extras_box() {
+    //p( "Extras");
+    oik_require( "includes/oik-loader-extras.php", "oik-loader");
+    $extras = oik_loader_load_extras();
+    //print_r( $extras );
+    $extras_string = implode( "", $extras );
+    $lines = min( 10, count( $extras ));
+    bw_form();
+    BW_::bw_textarea( 'extras', 190, '', $extras_string, $lines );
+    //gob();
+    br();
+    BW_::p( isubmit( 'save-extras', __( "Save extras and rebuild index", "oik-loader" ) ) );
+
+}
+
+function oik_loader_save_extras() {
+    oik_require( "includes/oik-loader-extras.php", "oik-loader");
+    oik_loader_lazy_save_extras();
 }
 
 

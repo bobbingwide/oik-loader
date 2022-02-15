@@ -5,7 +5,7 @@
 * Tags: oik, plugin, loader
 * Requires at least: 5.2.3
 * Tested up to: 5.9
-* Stable tag: 1.3.0
+* Stable tag: 1.3.1
 
 WordPress Must Use plugin to load required plugins.
 
@@ -53,6 +53,9 @@ In v1.1.0 the logic has been changed to support different variants of the Gutenb
 1. None
 
 ## Upgrade Notice 
+# 1.3.1 
+Update to stop NextGEN Gallery updating active_plugins.
+
 # 1.3.0 
 Upgrade for use on cwiccer.com
 
@@ -76,8 +79,11 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 ## Changelog 
+# 1.3.1 
+* Changed: Prevent NextGEN Gallery from updating active_plugins at shutdown #13
+
 # 1.3.0 
-* Changed: Add support to edit the oik-loader-extras.csv file #10
+* Changed: Add support to edit the oik-loader-extras.csv file #13
 * Fixed: Avoid notice when oik-loader-extras.csv file is missing #9
 * Tested: With WordPress 5.9
 * Tested: With PHP 8.0

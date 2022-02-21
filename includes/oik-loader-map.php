@@ -41,8 +41,10 @@ function oik_loader_load_map() {
 	$csvs = oik_loader_map_block_example_CPT( $csvs );
 	//echo count( $csvs );
 	//echo PHP_EOL;
-    oik_require( "includes/oik-loader-extras.php", "oik-loader" );
-    $csvs = oik_loader_append_extras( $csvs );
+
+    // No need to do this now.
+    //oik_require( "includes/oik-loader-extras.php", "oik-loader" );
+    //$csvs = oik_loader_append_extras( $csvs );
 	return $csvs;
 }
 

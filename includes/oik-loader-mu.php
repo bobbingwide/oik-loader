@@ -31,7 +31,26 @@ if ( PHP_SAPI !== "cli" ) {
 }
 
 function oik_loader_mu_loaded() {
-	$index = oik_loader_mu_build_index();
+    $plugins = null;
+    $files = ['oik-loader', 'oik-loader-extras' ];
+    foreach ($files as $file) {
+        $plugins = oik_loader_try_file( $file );
+        if ($plugins) {
+            break;
+        }
+    }
+}
+
+/**
+ * Attempts to determine the plugins to load from the given file.
+ *
+ * @param $file
+ * @return array|null
+ */
+function oik_loader_try_file( $file ) {
+    $plugins = null;
+	$index = oik_loader_mu_build_index( $file );
+	//$index_extra = oik_loader
 	//print_r( $index );
 
 	if ( $index ) {
@@ -58,15 +77,21 @@ function oik_loader_mu_loaded() {
 		}
 
 	}
+	return $plugins;
 }
 
 /**
- * Builds the lookup index from oik-loader.blog_id.csv
+ * Builds the lookup index from the oik-loader files
+ *
+ * oik-loader.blog_id.csv - automatically defined entries
+ * oik-loader-extras.blog_id.csv - manually defined entries
  *
  * @return array|null
  */
-function oik_loader_mu_build_index() {
-	$oik_loader_csv = oik_loader_csv_file();
+function oik_loader_mu_build_index( $file='oik-loader') {
+
+
+	$oik_loader_csv = oik_loader_csv_file( $file );
 	$index = null;
 	if ( file_exists( $oik_loader_csv) ) {
 		//echo "File exists";
@@ -121,10 +146,23 @@ function oik_loader_build_index( $lines ) {
 			$ID = array_shift( $csv );
 			$index[ $url] = $csv;
 			$index[ $ID] = $csv;
+            oik_loader_map_id( $url, $ID );
 		}
 	}
 	//print_r( $index );
 	return $index;
+}
+
+function oik_loader_map_id( $url, $id=null ) {
+    static $url_id_map = [];
+    if ( null !== $id ) {
+        $url_id_map[ $url ] = $id;
+        $url_id_map[ $id ] = $url;
+    }
+    if ( isset( $url_id_map[ $url ] ) ) {
+        return $url_id_map[ $url ];
+    }
+    return null;
 }
 
 /**
@@ -153,7 +191,9 @@ function oik_loader_mu_query_plugins( $index, $page ) {
 /**
  * Implements 'option_active_plugins' filter
  *
- * Adds the missing plugin(s) to the list of plugins to load
+ * Adds the missing plugin(s) to the list of plugins to load.
+ * Note: The plugins are added to the front of the active_plugins array.
+ *
  * This filter may be called multiple times, but we should only need to add our plugins once.
  * @TODO Improve performance
  *
@@ -164,7 +204,7 @@ function oik_loader_mu_query_plugins( $index, $page ) {
  */
 function oik_loader_option_active_plugins( $active_plugins, $option ) {
 	//print_r( $active_plugins );
-	//bw_backtrace();
+	bw_backtrace();
 	$load_plugins = oik_loader_load_plugins();
 	// build plugin dependency list
 	if ( $load_plugins ) {
@@ -176,6 +216,7 @@ function oik_loader_option_active_plugins( $active_plugins, $option ) {
 				//echo "adding $load_plugin";
                 array_unshift( $active_plugins, $load_plugin );
 				//$active_plugins[] = $load_plugin;
+                bw_trace2( $active_plugins, "added $load_plugin", false);
 			}
 		}
 	}

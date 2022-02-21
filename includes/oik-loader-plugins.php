@@ -17,12 +17,15 @@ function oik_loader_map_oik_plugins_CPT( $csvs ) {
 	$scheme_host = oik_loader_get_scheme_host();
 	//$csvs = [];
 	foreach ( $posts as $post ) {
-		$line     = [];
-		$line[]   = oik_loader_get_hostless_permalink( $post->ID, $scheme_host );
-		$line[]   = $post->ID;
-		$line[]   = get_post_meta( $post->ID, '_oikp_name', true );
-		$csv_line = implode( ",", $line );
-		$csvs[]   = $csv_line . PHP_EOL;
+        $line = [];
+        $line[] = oik_loader_get_hostless_permalink($post->ID, $scheme_host);
+        $line[] = $post->ID;
+        $plugin_name = get_post_meta($post->ID, '_oikp_name', true);
+        if ($plugin_name) {
+            $line[] = $plugin_name;
+            $csv_line = implode(",", $line);
+            $csvs[] = $csv_line . PHP_EOL;
+        }
 	}
 
 	return $csvs;

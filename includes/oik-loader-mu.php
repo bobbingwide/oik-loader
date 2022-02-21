@@ -28,9 +28,11 @@ License: GPL2
 
 if ( PHP_SAPI !== "cli" ) {
 	oik_loader_mu_loaded();
+	add_action( 'oik-loader-mu-reload', 'oik_loader_mu_loaded' );
 }
 
 function oik_loader_mu_loaded() {
+    oik_loader_load_plugins( [] );
     $plugins = null;
     $files = ['oik-loader', 'oik-loader-extras' ];
     foreach ($files as $file) {
@@ -39,6 +41,7 @@ function oik_loader_mu_loaded() {
             break;
         }
     }
+
 }
 
 /**
@@ -90,7 +93,6 @@ function oik_loader_try_file( $file ) {
  */
 function oik_loader_mu_build_index( $file='oik-loader') {
 
-
 	$oik_loader_csv = oik_loader_csv_file( $file );
 	$index = null;
 	if ( file_exists( $oik_loader_csv) ) {
@@ -98,9 +100,7 @@ function oik_loader_mu_build_index( $file='oik-loader') {
 		$lines = file( $oik_loader_csv );
 		//echo count( $lines );
 		//echo PHP_EOL;
-		if ( count( $lines ) ) {
-			$index = oik_loader_build_index( $lines );
-		}
+		$index = oik_loader_build_index( $lines );
 	}
 	return $index;
 }
@@ -138,16 +138,18 @@ function oik_loader_csv_file( $file='oik-loader') {
  */
 function oik_loader_build_index( $lines ) {
 	$index = [];
-	foreach ( $lines as $line ) {
-		$csv = str_getcsv( $line);
-		if ( count( $csv) >= 3 ) {
-			//echo $csv[0];
-			$url = array_shift( $csv );
-			$ID = array_shift( $csv );
-			$index[ $url] = $csv;
-			$index[ $ID] = $csv;
-            oik_loader_map_id( $url, $ID );
-		}
+    if ( count( $lines ) ) {
+	    foreach ( $lines as $line ) {
+            $csv = str_getcsv($line);
+            if (count($csv) >= 3) {
+                //echo $csv[0];
+                $url = array_shift($csv);
+                $ID = array_shift($csv);
+                $index[$url] = $csv;
+                $index[$ID] = $csv;
+                oik_loader_map_id($url, $ID);
+            }
+        }
 	}
 	//print_r( $index );
 	return $index;

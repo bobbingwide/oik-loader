@@ -12,11 +12,12 @@ function oik_loader_append_extras( $csvs ) {
 }
 
 function oik_loader_extras_file() {
+    global $blog_id;
     $csv_file = WPMU_PLUGIN_DIR ;
     $csv_file .= '/';
     $csv_file .= 'oik-loader-extras';
-    //$csv_file .= '.';
-    //$csv_file .= $blog_id;
+    $csv_file .= '.';
+    $csv_file .= $blog_id;
     $csv_file .= '.csv';
     return $csv_file;
 }

@@ -224,18 +224,15 @@ function oik_loader_extras_box() {
     $extras = oik_loader_load_extras();
     //print_r( $extras );
     $extras_string = implode( "", $extras );
-    $lines = min( 10, count( $extras ));
+    $lines = max( 10, count( $extras ));
     bw_form();
     BW_::bw_textarea( 'extras', 190, '', $extras_string, $lines );
     //gob();
     br();
-    BW_::p( isubmit( 'save-extras', __( "Save extras and rebuild index", "oik-loader" ) ) );
-
+    BW_::p( isubmit( 'save-extras', __( "Save extras and rebuild index", "oik-loader" ), null, 'button-primary' ) );
 }
 
 function oik_loader_save_extras() {
     oik_require( "includes/oik-loader-extras.php", "oik-loader");
     oik_loader_lazy_save_extras();
 }
-
-

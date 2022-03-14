@@ -5,7 +5,7 @@
 * Tags: oik, plugin, loader
 * Requires at least: 5.2.3
 * Tested up to: 5.9
-* Stable tag: 1.3.1
+* Stable tag: 1.4.0
 
 WordPress Must Use plugin to load required plugins.
 
@@ -53,6 +53,9 @@ In v1.1.0 the logic has been changed to support different variants of the Gutenb
 1. None
 
 ## Upgrade Notice 
+# 1.4.0 
+Update for use with the active-plugins block/shortcode
+
 # 1.3.1 
 Update to stop NextGEN Gallery updating active_plugins.
 
@@ -79,6 +82,15 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 ## Changelog 
+# 1.4.0 
+* Changed: Improve oik-loader admin display - width and size of extras #13
+* Changed: Implement oik-loader-mu-reload action #17
+* Changed: Ignore plugins with missing plugin file name (_oikp_name) #15
+* Changed: Load CSV files individually #16
+* Changed: One extras file per Multi Site site #13 #16
+* Tested: With WordPress 5.9.2
+* Tested: With PHP 8.0
+
 # 1.3.1 
 * Changed: Prevent NextGEN Gallery from updating active_plugins at shutdown #13
 

@@ -4,8 +4,8 @@
 * Donate link: https://www.oik-plugins.com/oik/oik-donate/
 * Tags: oik, plugin, loader
 * Requires at least: 5.2.3
-* Tested up to: 5.9
-* Stable tag: 1.4.0
+* Tested up to: 6.2.2
+* Stable tag: 1.4.1
 
 WordPress Must Use plugin to load required plugins.
 
@@ -53,6 +53,9 @@ In v1.1.0 the logic has been changed to support different variants of the Gutenb
 1. None
 
 ## Upgrade Notice 
+# 1.4.1 
+Upgrade to avoid Fatal errors when multiple posts being processed
+
 # 1.4.0 
 Update for use with the active-plugins block/shortcode
 
@@ -82,6 +85,12 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 ## Changelog 
+# 1.4.1 
+* Fixed: Cater for multiple post selection #19
+* Fixed: Correct parameters to oik_register_plugin_server. See diy-oik issues 6
+* Tested: With WordPress 6.2.2
+* Tested: With PHP 8.0
+
 # 1.4.0 
 * Changed: Improve oik-loader admin display - width and size of extras #13
 * Changed: Implement oik-loader-mu-reload action #17

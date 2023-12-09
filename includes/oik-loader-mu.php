@@ -218,7 +218,7 @@ function oik_loader_option_active_plugins( $active_plugins, $option ) {
 				//echo "adding $load_plugin";
                 array_unshift( $active_plugins, $load_plugin );
 				//$active_plugins[] = $load_plugin;
-                bw_trace2( $active_plugins, "added $load_plugin", false);
+                //bw_trace2( $active_plugins, "added $load_plugin", false);
 			}
 		}
 	}

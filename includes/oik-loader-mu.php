@@ -3,9 +3,9 @@
 Plugin Name: oik-loader-MU
 Plugin URI: https://www.oik-plugins.com/oik-plugins/oik-loader-mu
 Description: WordPress Must Use plugin to load required plugins
-Version: 1.2.1
+Version: 1.4.3
 Author: bobbingwide
-Author URI: https://www.oik-plugins.com/author/bobbingwide
+Author URI: https://bobbingwide.com/about-bobbing-wide
 License: GPL2
 
     Copyright 2019-2023 Bobbing Wide (email : herb@bobbingwide.com )
@@ -206,7 +206,7 @@ function oik_loader_mu_query_plugins( $index, $page ) {
  */
 function oik_loader_option_active_plugins( $active_plugins, $option ) {
 	//print_r( $active_plugins );
-	bw_backtrace();
+	//bw_backtrace();
 	$load_plugins = oik_loader_load_plugins();
 	// build plugin dependency list
 	if ( $load_plugins ) {

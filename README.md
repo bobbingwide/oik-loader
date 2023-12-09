@@ -4,8 +4,8 @@
 * Donate link: https://www.oik-plugins.com/oik/oik-donate/
 * Tags: oik, plugin, loader
 * Requires at least: 5.2.3
-* Tested up to: 6.4.1
-* Stable tag: 1.4.4
+* Tested up to: 6.4.2
+* Stable tag: 1.4.3
 
 WordPress Must Use plugin to load required plugins.
 
@@ -53,6 +53,9 @@ In v1.1.0 the logic has been changed to support different variants of the Gutenb
 1. None
 
 ## Upgrade Notice 
+# 1.4.3 
+Update for PHP 8.3 support.
+
 # 1.4.2 
 Update for PHP 8.1 and PHP 8.2 support
 
@@ -88,6 +91,11 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 ## Changelog 
+# 1.4.3 
+* Fixed: Remove bw_backtrace() from oik-loader-mu.php #21
+* Tested: With WordPress 6.4.2
+* Tested: With PHP 8.3
+
 # 1.4.2 
 * Changed: Add PHPUnit tests to load files #20
 * Tested: With WordPress 6.4.1

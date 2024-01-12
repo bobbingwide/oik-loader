@@ -41,6 +41,7 @@ function oik_loader_load_map() {
 	$csvs = oik_loader_map_block_example_CPT( $csvs );
 	//echo count( $csvs );
 	//echo PHP_EOL;
+	$csvs = oik_loader_map_post_type_meta_key( $csvs, 'post', 'component' );
 
     // No need to do this now.
     //oik_require( "includes/oik-loader-extras.php", "oik-loader" );
@@ -67,10 +68,11 @@ function oik_loader_get_hostless_permalink( $post_id, $scheme_host ) {
 	return $permalink;
 }
 
-function oik_loader_query_plugin_name( $post_id ) {
+function oik_loader_query_plugin_name( $post_id, $meta_key='_oik_sc_plugin' ) {
 	$plugin_name = null;
-	$plugin_id = get_post_meta( $post_id, "_oik_sc_plugin", true );
+	$plugin_id = get_post_meta( $post_id, $meta_key, true );
 	if ( $plugin_id ) {
+		bw_trace2( $plugin_id, "Plugin ID");
 		$plugin_name = get_post_meta( $plugin_id, "_oikp_name", true );
 	}
 	return $plugin_name;
@@ -149,6 +151,38 @@ function oik_loader_write_csv_file( $csvs ) {
 	$csv_file = oik_loader_csv_file();
 	file_put_contents( $csv_file, $csvs );
 }
+
+/**
+ * Map post type meta_key
+ */
+function oik_loader_map_post_type_meta_key( $csvs, $post_type, $meta_key ) {
+	oik_require( "includes/bw_posts.php" );
+	$atts        = array(
+		"post_type"    => $post_type,
+		"post_parent"  => 0,
+		"number_posts" => - 1
+	);
+	$posts       = bw_get_posts( $atts );
+	$scheme_host = oik_loader_get_scheme_host();
+	foreach ( $posts as $post ) {
+		$line     = [];
+		$line[]   = oik_loader_get_hostless_permalink( $post->ID, $scheme_host );
+		$line[]   = $post->ID;
+		$line[]   = oik_loader_query_plugin_name( $post->ID, $meta_key );
+		$ids = get_post_meta( $post->ID, '_oikp_dependency', false );
+		foreach ( $ids as $key => $id) {
+			if ( $id ) {
+				$line[] = get_post_meta( $id, "_oikp_name", true );
+			}
+		}
+		$csv_line = implode( ",", $line );
+		$csvs[]   = $csv_line . PHP_EOL;
+	}
+	return $csvs;
+}
+
+
+
 
 
 

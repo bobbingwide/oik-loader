@@ -140,7 +140,7 @@ function oik_loader_build_index( $lines ) {
 	$index = [];
     if ( count( $lines ) ) {
 	    foreach ( $lines as $line ) {
-            $csv = str_getcsv($line);
+            $csv = str_getcsv($line, ",", '"', "\\");
             if (count($csv) >= 3) {
                 //echo $csv[0];
                 $url = array_shift($csv);

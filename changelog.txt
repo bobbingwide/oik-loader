@@ -1,4 +1,7 @@
 == Upgrade Notice ==
+= 1.5.0 =
+Update for automatic loading of plugins associated with posts.
+
 = 1.4.3 =
 Update for PHP 8.3 support.
 
@@ -37,6 +40,11 @@ Prototype version developed with oik-magnetic-poetry.
 oik-blocks needs to be activated since these blocks are used by the block CPT.
 
 == Changelog ==
+= 1.5.0 =
+* Added: Support automatic loading of plugins referred to by component #22
+* Tested: With WordPress 6.4.2
+* Tested: With PHP 8.3
+
 = 1.4.3 =
 * Fixed: Remove bw_backtrace() from oik-loader-mu.php #21
 * Tested: With WordPress 6.4.2

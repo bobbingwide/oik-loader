@@ -4,8 +4,8 @@
 * Donate link: https://www.oik-plugins.com/oik/oik-donate/
 * Tags: oik, plugin, loader
 * Requires at least: 5.2.3
-* Tested up to: 6.4.2
-* Stable tag: 1.5.0
+* Tested up to: 6.9
+* Stable tag: 1.5.1
 
 WordPress Must Use plugin to load required plugins.
 
@@ -54,16 +54,14 @@ In v1.1.0 the logic has been changed to support different variants of the Gutenb
 1. None
 
 ## Upgrade Notice 
-# 1.5.0 
-Update for automatic loading of plugins associated with posts.
-
+# 1.5.1 
+Tested with WordPress 6.9 and PHP 8.4
 
 ## Changelog 
-# 1.5.0 
-* Added: Support automatic loading of plugins referred to by component #22
-* Tested: With WordPress 6.4.2
-* Tested: With PHP 8.3
-
+# 1.5.1 
+* Changed: Change str_getcsv default escape to blank #23
+* Tested: With WordPress 6.9
+* Tested: With PHP 8.4
 
 ## Further reading 
 If you want to read more about oik plugins and themes then please visit
